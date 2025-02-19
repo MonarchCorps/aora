@@ -5,12 +5,46 @@ import FormField from '../../components/FormField'
 import { useState } from 'react'
 import CustomButton from '../../components/CustomButton'
 import { Link } from 'expo-router'
+import { useLogin } from '@/store/authFn'
+import useAuth from '@/hooks/useAuth'
+import { storeAccessToken, storeRefreshToken } from '@/helper/tokens'
+import { navigate } from '@/helper/navigate'
+import CustomAlert from '@/components/CustomAlert'
 
 const SignIn = () => {
+    const { setAuth } = useAuth()
     const [form, setForm] = useState({
         state: '',
         password: ''
     })
+    const { mutate, isPending } = useLogin()
+    const [isAlertVisible, setAlertVisible] = useState(false)
+    const [message, setMessage] = useState({ msg: '', type: '' });
+
+    const invalid = Object.values(form).some((val) => val === '');
+
+    const handleSubmit = (data) => {
+        if (invalid) return;
+
+        mutate(data, {
+            onSuccess: async (data) => {
+                await storeAccessToken(data?.accessToken)
+                await storeRefreshToken(data?.refreshToken)
+                setAuth(data?.userResponse)
+                navigate('/')
+            },
+            onError: (error) => {
+                console.log(`Error ${error}`)
+                setMessage({
+                    msg: error?.response?.data?.message
+                        || 'Failed to login',
+                    type: 'error',
+                });
+                setAlertVisible(true);
+                Vibration.vibrate(300);
+            }
+        })
+    }
 
     return (
         <SafeAreaView className='bg-primary h-full'>
@@ -30,6 +64,7 @@ const SignIn = () => {
                         value={form.state}
                         handleChangeText={(e) => setForm({ ...form, state: e })}
                         otherStyles='mt-7'
+                        isPending={isPending}
                     />
 
                     <FormField
@@ -37,12 +72,16 @@ const SignIn = () => {
                         value={form.password}
                         handleChangeText={(e) => setForm({ ...form, password: e })}
                         otherStyles='mt-7'
+                        isPending={isPending}
+                        isPassword={true}
                     />
 
                     <CustomButton
                         title='Sign In'
                         handlePress={() => handleSubmit(form)}
                         containerStyles='mt-7'
+                        isLoading={isPending}
+                        disabled={invalid}
                     />
 
                     <View className='justify-center pt-8 flex-row gap-5'>
@@ -55,6 +94,18 @@ const SignIn = () => {
                     </View>
                 </View>
 
+                <CustomAlert
+                    isVisible={isAlertVisible}
+                    title="Login Failed"
+                    message={message}
+                    onCancel={() => setAlertVisible(false)}
+                    onConfirm={() => {
+                        setAlertVisible(false)
+                        handleSubmit(form)
+                    }}
+                    confirmText='Try Again'
+                    cancelText='Close'
+                />
             </ScrollView>
         </SafeAreaView>
     )
