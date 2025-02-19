@@ -1,23 +1,28 @@
-import axios from "axios";
 import { CONFIGS } from "../configs/index";
 import { getAccessToken, storeAccessToken, removeAccessToken, removeRefreshToken } from "../helper/tokens";
 import { replace } from "../helper/navigate";
+import axios from "axios";
 
 const baseURL = CONFIGS.URL.CLIENT_URL;
 
-const $http = axios.create({
+export const axiosPrivate = axios.create({
     baseURL,
-    timeout: 30000,
     headers: {
-        "Content-Type": "application/json"
-    }
+        'Content-Type': 'application/json',
+    },
+    withCredentials: true,
 });
 
+const $http = axiosPrivate;
+let interceptorsSet = false;
+
 const setupInterceptors = (setAuth, refresh) => {
+    if (interceptorsSet) return;
+
     $http.interceptors.request.use(
         async (config) => {
             let token = await getAccessToken();
-            console.log(`Token: ${token}`)
+            console.log(`Token: ${token}`);
 
             if (token && !config.headers["Authorization"]) {
                 config.headers["Authorization"] = `Bearer ${token}`;
@@ -42,9 +47,7 @@ const setupInterceptors = (setAuth, refresh) => {
                     return $http(prevRequest);
                 } catch (refreshError) {
                     console.error("Refresh token expired:", refreshError);
-
                     if (refreshError.response?.status === 401) {
-                        // 🚨 Refresh token expired! Log the user out and redirect
                         setAuth({});
                         await removeAccessToken();
                         await removeRefreshToken();
@@ -55,6 +58,8 @@ const setupInterceptors = (setAuth, refresh) => {
             return Promise.reject(error);
         }
     );
-};
+
+    interceptorsSet = true;
+}
 
 export { $http, setupInterceptors };
