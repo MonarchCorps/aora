@@ -1,17 +1,5 @@
 import * as SecureStore from "expo-secure-store";
 
-export const storeRefreshToken = async (refreshToken) => {
-    try {
-        await SecureStore.setItemAsync(
-            "aora_refreshToken",
-            JSON.stringify({ refreshToken })
-        );
-    } catch (error) {
-        console.error("Error storing refresh token:", error);
-    }
-};
-
-
 export const getRefreshToken = async () => {
     try {
         const storedData = await SecureStore.getItemAsync("aora_refreshToken");
@@ -22,15 +10,26 @@ export const getRefreshToken = async () => {
     }
 };
 
-
-export const removeRefreshToken = async () => {
+export const getAccessToken = async () => {
     try {
-        await SecureStore.deleteItemAsync("aora_refreshToken");
+        const storedData = await SecureStore.getItemAsync("aora_accessToken");
+        return storedData ? JSON.parse(storedData).accessToken : null;
     } catch (error) {
-        console.error("Error removing refresh token:", error);
+        console.error("Error retrieving access token:", error);
+        return null;
     }
 };
 
+export const storeRefreshToken = async (refreshToken) => {
+    try {
+        await SecureStore.setItemAsync(
+            "aora_refreshToken",
+            JSON.stringify({ refreshToken })
+        );
+    } catch (error) {
+        console.error("Error storing refresh token:", error);
+    }
+};
 
 export const storeAccessToken = async (accessToken) => {
     try {
@@ -43,17 +42,13 @@ export const storeAccessToken = async (accessToken) => {
     }
 };
 
-
-export const getAccessToken = async () => {
+export const removeRefreshToken = async () => {
     try {
-        const storedData = await SecureStore.getItemAsync("aora_accessToken");
-        return storedData ? JSON.parse(storedData).accessToken : null;
+        await SecureStore.deleteItemAsync("aora_refreshToken");
     } catch (error) {
-        console.error("Error retrieving access token:", error);
-        return null;
+        console.error("Error removing refresh token:", error);
     }
 };
-
 
 export const removeAccessToken = async () => {
     try {
