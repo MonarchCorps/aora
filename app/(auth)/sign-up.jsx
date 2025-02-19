@@ -29,11 +29,10 @@ const SignUp = () => {
 
         mutate(data, {
             onSuccess: async (data) => {
-                console.log(`Registered ${JSON.stringify(data)}`)
                 await storeAccessToken(data?.accessToken);
                 await storeRefreshToken(data?.refreshToken);
                 setAuth(data?.userDetails);
-                // navigate('/');
+                navigate('/');
             },
             onError: (error) => {
                 console.log(error)
