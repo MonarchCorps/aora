@@ -8,7 +8,7 @@ const baseURL = CONFIGS.URL.CLIENT_URL;
 export const axiosPrivate = axios.create({
     baseURL,
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data'
     },
     withCredentials: true,
 });
@@ -22,7 +22,6 @@ const setupInterceptors = (setAuth, refresh) => {
     $http.interceptors.request.use(
         async (config) => {
             let token = await getAccessToken();
-            console.log(`Token: ${token}`);
 
             if (token && !config.headers["Authorization"]) {
                 config.headers["Authorization"] = `Bearer ${token}`;
@@ -51,7 +50,7 @@ const setupInterceptors = (setAuth, refresh) => {
                         setAuth({});
                         await removeAccessToken();
                         await removeRefreshToken();
-                        replace('sign-in');
+                        replace('/sign-in');
                     }
                 }
             }
