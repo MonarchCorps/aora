@@ -21,11 +21,11 @@ function FormField({
         <View className={`space-y-2 ${otherStyles}`}>
             <Text className="text-base text-gray-100 font-pmedium">{title}</Text>
             <View
-                className={`border-2 w-full h-16 px-4  rounded-2xl items-center flex-row ${isFocused ? 'border-secondary' : 'border-black-200'
+                className={`border-2 w-full h-16 px-4 rounded-2xl items-center flex-row ${isFocused ? 'border-secondary' : 'border-black-200'
                     } ${isPending ? 'bg-[#1e1e2dce]' : 'bg-black-100'}`}
             >
                 <TextInput
-                    className={`flex-1 text-[#fff] font-psemibold text-base outline-none`}
+                    className={`flex-1 text-[#fff] font-psemibold text-base outline-none pt-3`}
                     value={value}
                     placeholder={placeholder}
                     placeholderTextColor="#7b7b8b"
