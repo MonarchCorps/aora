@@ -7,7 +7,7 @@ import CustomButton from '../../components/CustomButton';
 import { Link } from 'expo-router';
 import { useRegister } from '@/store/authFn';
 import useAuth from '../../hooks/useAuth';
-import { navigate } from '../../helper/navigate';
+import { replace } from '../../helper/navigate';
 import CustomAlert from '@/components/CustomAlert';
 import { storeAccessToken, storeRefreshToken } from '@/helper/tokens';
 
@@ -32,7 +32,7 @@ const SignUp = () => {
                 await storeAccessToken(data?.accessToken);
                 await storeRefreshToken(data?.refreshToken);
                 setAuth(data?.userDetails);
-                navigate('/');
+                replace('/');
             },
             onError: (error) => {
                 console.log(error)

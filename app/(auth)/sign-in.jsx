@@ -8,7 +8,7 @@ import { Link } from 'expo-router'
 import { useLogin } from '@/store/authFn'
 import useAuth from '@/hooks/useAuth'
 import { storeAccessToken, storeRefreshToken } from '@/helper/tokens'
-import { navigate } from '@/helper/navigate'
+import { replace } from '@/helper/navigate'
 import CustomAlert from '@/components/CustomAlert'
 
 const SignIn = () => {
@@ -30,8 +30,8 @@ const SignIn = () => {
             onSuccess: async (data) => {
                 await storeAccessToken(data?.accessToken)
                 await storeRefreshToken(data?.refreshToken)
-                setAuth(data?.userResponse)
-                navigate('/')
+                setAuth(data?.userDetails)
+                replace('/')
             },
             onError: (error) => {
                 console.log(`Error ${error}`)
