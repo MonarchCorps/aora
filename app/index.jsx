@@ -22,9 +22,9 @@ export default function Index() {
 					<View className='mt-5'>
 						<Text className='text-3xl text-[#fff] font-bold text-center'>
 							Discover Endless Possibilities with {' '}
-							<View className='relative'>
-								<Text className='text-secondary-200 font-bold text-3xl mt-[2.7rem]'>Aora</Text>
-								<Image source={images.path} className='w-[120px] h-[15px] absolute -bottom-3 -right-10' resizeMode='contain' />
+							<View className='relative mt-[2.7rem]'>
+								<Text className='text-secondary-200 font-bold text-3xl'>Aora</Text>
+								<Image source={images.path} className='w-[120px] h-[15px] absolute -bottom-4 -right-10' resizeMode='contain' />
 							</View>
 						</Text>
 						<Text className='text-sm font-pregular text-gray-100 mt-7 text-center'>Where creativity meets innovation: embark on a journey of limitless exploration with Aora</Text>
