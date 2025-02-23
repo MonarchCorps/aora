@@ -57,3 +57,22 @@ export const removeAccessToken = async () => {
         console.error("Error removing access token:", error);
     }
 };
+
+export const removeUserDetails = async () => {
+    try {
+        await SecureStore.deleteItemAsync("user_details");
+    } catch (error) {
+        console.error("Error removing user details:", error);
+    }
+}
+
+export const clearStorage = async () => {
+    try {
+        await removeUserDetails()
+        await removeAccessToken()
+        await removeRefreshToken()
+    } catch (error) {
+        console.error("Error clearing storage", error)
+    }
+}
+
