@@ -75,6 +75,7 @@ const Create = () => {
         mutate(formData, {
             onSuccess: (data) => {
                 queryClient.invalidateQueries({ queryKey: ["all-posts"] })
+                queryClient.invalidateQueries({ queryKey: ["trending-posts"] })
                 navigate('/')
             },
             onError: (error) => {
