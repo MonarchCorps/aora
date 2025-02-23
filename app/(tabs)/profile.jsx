@@ -2,14 +2,35 @@ import { View, FlatList, Image, RefreshControl, TouchableOpacity } from 'react-n
 import { SafeAreaView } from 'react-native-safe-area-context'
 import EmptyState from '@/components/EmptyState'
 import VideoCard from '@/components/VideoCard'
-import { items } from '@/db'
 import useAuth from '@/hooks/useAuth'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import InfoBox from '@/components/InfoBox'
 import { replace } from '@/helper/navigate'
+import { useFetchAllPosts, useFetchUserPosts } from '@/store/postFn'
+import { useQueryClient } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 
 const Profile = () => {
     const { auth } = useAuth()
+    const queryClient = useQueryClient();
+
+    const { data = [] } = useFetchAllPosts()
+
+    const [refreshing, setRefreshing] = useState(false);
+    const [userPosts, setUserPosts] = useState([])
+
+    useEffect(() => {
+        if (data?.length) {
+            const filteredData = data.filter(post => post?.creator?._id === auth?._id)
+            setUserPosts(filteredData)
+        }
+    }, [data])
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await queryClient.invalidateQueries({ queryKey: ["all-posts"] });
+        setRefreshing(false);
+    };
 
     const logout = () => {
 
@@ -18,7 +39,7 @@ const Profile = () => {
     return (
         <SafeAreaView className='bg-primary h-full'>
             <FlatList
-                data={items}
+                data={userPosts}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
                     return (
@@ -48,7 +69,7 @@ const Profile = () => {
                         />
                         <View className='mt-5 flex-row '>
                             <InfoBox
-                                title={items.length || 0}
+                                title={userPosts?.length || 0}
                                 subTitle='Posts'
                                 containerStyles='mr-5'
                                 titleStyles='text-xl'
@@ -65,10 +86,11 @@ const Profile = () => {
                     return (
                         <EmptyState
                             title='No videos found'
-                            subTitle='No videos found for this search query'
+                            subTitle='Your posts are unavailable'
                         />
                     )
                 }}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             />
         </SafeAreaView>
     )
