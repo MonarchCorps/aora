@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, Vibration, Button } from 'react-native';
+import { View, Text, ScrollView, Image, Vibration, Button, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '@/constants';
 import FormField from '../../components/FormField';
@@ -8,19 +8,18 @@ import { Link } from 'expo-router';
 import { useRegister } from '@/store/authFn';
 import useAuth from '../../hooks/useAuth';
 import { replace } from '../../helper/navigate';
-import CustomAlert from '@/components/CustomAlert';
 import { storeAccessToken, storeRefreshToken } from '@/helper/tokens';
 
 const SignUp = () => {
     const { setAuth } = useAuth();
+
     const [form, setForm] = useState({
         name: '',
         email: '',
         password: '',
     });
+
     const { mutate, isPending } = useRegister();
-    const [isAlertVisible, setAlertVisible] = useState(false);
-    const [message, setMessage] = useState({ msg: '', type: '' });
 
     const invalid = Object.values(form).some((val) => val === '');
 
@@ -35,13 +34,10 @@ const SignUp = () => {
                 replace('/');
             },
             onError: (error) => {
-                console.log(error)
-                setMessage({
-                    msg: error?.response?.data?.message
-                        || 'Failed to register',
-                    type: 'error',
-                });
-                setAlertVisible(true);
+                Alert.alert(
+                    'Error',
+                    error.response?.data?.message || 'Failed to login'
+                )
                 Vibration.vibrate(300);
             },
         });
@@ -104,18 +100,6 @@ const SignUp = () => {
                     </View>
                 </View>
 
-                <CustomAlert
-                    isVisible={isAlertVisible}
-                    title="Registration Failed"
-                    message={message}
-                    onCancel={() => setAlertVisible(false)}
-                    onConfirm={() => {
-                        setAlertVisible(false);
-                        handleSubmit(form);
-                    }}
-                    confirmText="Try Again"
-                    cancelText="Close"
-                />
             </ScrollView>
         </SafeAreaView >
     );

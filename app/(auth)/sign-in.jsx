@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, Vibration } from 'react-native'
+import { View, Text, ScrollView, Image, Vibration, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '@/constants'
 import FormField from '../../components/FormField'
@@ -9,17 +9,16 @@ import { useLogin } from '@/store/authFn'
 import useAuth from '@/hooks/useAuth'
 import { storeAccessToken, storeRefreshToken } from '@/helper/tokens'
 import { replace } from '@/helper/navigate'
-import CustomAlert from '@/components/CustomAlert'
 
 const SignIn = () => {
     const { setAuth } = useAuth()
+
     const [form, setForm] = useState({
         state: '',
         password: ''
     })
+
     const { mutate, isPending } = useLogin()
-    const [isAlertVisible, setAlertVisible] = useState(false)
-    const [message, setMessage] = useState({ msg: '', type: '' });
 
     const invalid = Object.values(form).some((val) => val === '');
 
@@ -34,13 +33,10 @@ const SignIn = () => {
                 replace('/')
             },
             onError: (error) => {
-                console.log(`Error ${error}`)
-                setMessage({
-                    msg: error?.response?.data?.message
-                        || 'Failed to login',
-                    type: 'error',
-                });
-                setAlertVisible(true);
+                Alert.alert(
+                    'Error',
+                    error.response?.data?.message || 'Failed to login'
+                )
                 Vibration.vibrate(300);
             }
         })
@@ -94,18 +90,6 @@ const SignIn = () => {
                     </View>
                 </View>
 
-                <CustomAlert
-                    isVisible={isAlertVisible}
-                    title="Login Failed"
-                    message={message}
-                    onCancel={() => setAlertVisible(false)}
-                    onConfirm={() => {
-                        setAlertVisible(false)
-                        handleSubmit(form)
-                    }}
-                    confirmText='Try Again'
-                    cancelText='Close'
-                />
             </ScrollView>
         </SafeAreaView>
     )
