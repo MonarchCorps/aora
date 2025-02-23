@@ -8,7 +8,7 @@ const TabIcon = ({ icon, color, name, focused }) => {
         <View className='items-center justify-center' style={{ width: 60 }}>
             <Image source={icon} resizeMode='contain' tintColor={color} className='w-6 h-6' />
             <Text
-                className={`${focused ? 'font-semibold' : 'font-pregular'} text-xs`}
+                className={`${focused ? 'font-semibold' : 'font-pregular'} text-xs mt-1`}
                 style={{ color, textAlign: 'center' }}
                 numberOfLines={1}
             >
@@ -45,8 +45,8 @@ const TabsLayout = () => {
                     tabBarStyle: {
                         backgroundColor: '#161622',
                         borderTopWidth: 0,
-                        paddingTop: 6,
-                        height: 55,
+                        paddingTop: 9,
+                        height: 70,
                         position: 'absolute',
                         bottom: isKeyboardVisible ? -60 : 0, // Move tab bar down when keyboard opens
                         left: 0,
