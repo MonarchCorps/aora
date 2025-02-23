@@ -7,6 +7,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import CustomButton from '@/components/CustomButton'
 import * as DocumentPicker from 'expo-document-picker'
 import { useCreatePost } from '@/store/postFn'
+import { navigate } from '@/helper/navigate'
+import { useQueryClient } from '@tanstack/react-query'
 
 const Create = () => {
 
@@ -16,6 +18,8 @@ const Create = () => {
         thumbnail: null,
         prompt: ''
     })
+
+    const queryClient = useQueryClient()
 
     const invalid = Object.values(form).some(val => val === '' || val === null)
 
@@ -70,7 +74,8 @@ const Create = () => {
 
         mutate(formData, {
             onSuccess: (data) => {
-                console.log(data)
+                queryClient.invalidateQueries({ queryKey: ["all-posts"] })
+                navigate('/')
             },
             onError: (error) => {
                 console.log(error)
@@ -149,6 +154,10 @@ const Create = () => {
                     handleChangeText={(e) => setForm(prev => ({ ...prev, prompt: e }))}
                     otherStyles="mt-7"
                 />
+                <Text className='text-red-800 text-base font-roboto'>
+                    <Text className='font-extrabold'>Note: {' '}</Text>
+                    <Text>Large files take longer to create post!</Text>
+                </Text>
                 <CustomButton
                     title="Submit & Publish"
                     handlePress={handleSubmit}
