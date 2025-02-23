@@ -9,6 +9,7 @@ import { replace } from '@/helper/navigate'
 import { useFetchAllPosts, useFetchUserPosts } from '@/store/postFn'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
+import { clearStorage } from '@/helper/tokens'
 
 const Profile = () => {
     const { auth } = useAuth()
@@ -32,8 +33,9 @@ const Profile = () => {
         setRefreshing(false);
     };
 
-    const logout = () => {
-
+    const logout = async () => {
+        await clearStorage()
+        replace('/sign-in')
     }
 
     return (
@@ -51,7 +53,7 @@ const Profile = () => {
                     <View className='w-full justify-center items-center mt-6 mb-12 px-4'>
                         <TouchableOpacity
                             className='w-full items-end mb-10'
-                            onPress={() => replace('/sign-in')}
+                            onPress={logout}
                         >
                             <MaterialIcons name="logout" size={24} color="red" className='opacity-60' />
                         </TouchableOpacity>
