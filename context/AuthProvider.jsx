@@ -1,12 +1,12 @@
 import * as SecureStore from "expo-secure-store";
 import { useState, useEffect } from "react";
-import useRefreshToken from "@/hooks/useRefreshToken";
-import { setupInterceptors } from "@/http/xhr";
-import { AuthContext } from "../AuthContext";
+import { createContext } from "react";
+
+export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
     const [auth, setAuthState] = useState({});
-    const refresh = useRefreshToken();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadAuthData = async () => {
@@ -15,21 +15,18 @@ export const AuthProvider = ({ children }) => {
                 if (storedAuth) {
                     setAuthState(JSON.parse(storedAuth));
                 } else {
-                    setAuthState({})
+                    setAuthState({});
                 }
             } catch (error) {
                 console.error("Error loading auth data: ", error);
+            } finally {
+                setLoading(false);
             }
         };
 
         loadAuthData();
     }, []);
 
-    useEffect(() => {
-        if (auth) {
-            setupInterceptors(setAuthState, refresh);
-        }
-    }, [auth, refresh]);
 
     const setAuth = async (newAuth) => {
         const updatedAuth = { ...auth, ...newAuth };
@@ -38,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ auth, setAuth }}>
+        <AuthContext.Provider value={{ auth, setAuth, loading }}>
             {children}
         </AuthContext.Provider>
     );
