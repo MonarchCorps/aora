@@ -25,7 +25,7 @@ function FormField({
                     } ${isPending ? 'bg-[#1e1e2dce]' : 'bg-black-100'}`}
             >
                 <TextInput
-                    className={`flex-1 text-[#fff] font-psemibold text-base outline-none pt-3`}
+                    className={`flex-1 text-[#fff] font-psemibold text-base outline-none`}
                     value={value}
                     placeholder={placeholder}
                     placeholderTextColor="#7b7b8b"
