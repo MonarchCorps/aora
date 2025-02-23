@@ -3,7 +3,7 @@ import { getAccessToken, storeAccessToken, getRefreshToken, clearStorage } from 
 import { replace } from "../helper/navigate";
 import axios from "axios";
 
-const baseURL = CONFIGS.URL.CLIENT_URL;
+const baseURL = CONFIGS.URL.API_BASE_URL;
 
 export const axiosPrivate = axios.create({
     baseURL,
