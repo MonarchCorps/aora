@@ -28,6 +28,7 @@ const Create = () => {
     const { mutate, isPending } = useCreatePost()
 
     const openPicker = async (selectType) => {
+        if (isPending) return;
         // const result = await DocumentPicker.getDocumentAsync({
         //     type: selectType === 'image'
         //         ? ['image/png', 'image/jpg', 'image/jpeg']
@@ -42,11 +43,11 @@ const Create = () => {
         if (!result.canceled) {
             const file = result.assets[0];
 
-            if (selectType === 'image' && file.size > 10485760) {
+            if (selectType === 'image' && file.fileSize > 10485760) {
                 return Alert.alert("Error", "Thumbnail file exceeds the 10MB limit");
             }
 
-            if (selectType === 'video' && file.size > 104857600) {
+            if (selectType === 'video' && file.fileSize > 104857600) {
                 return Alert.alert("Error", "Video file exceeds the 100MB limit");
             }
 
@@ -104,6 +105,7 @@ const Create = () => {
                     placeholder="Give your video a catch title..."
                     handleChangeText={(e) => setForm(prev => ({ ...prev, title: e }))}
                     otherStyles="mt-10"
+                    isPending={isPending}
                 />
 
                 <View className='mt-7 space-y-2'>
@@ -155,6 +157,7 @@ const Create = () => {
                     placeholder="The prompt you used to create this video"
                     handleChangeText={(e) => setForm(prev => ({ ...prev, prompt: e }))}
                     otherStyles="mt-7"
+                    isPending={isPending}
                 />
                 <Text className='text-red-800 text-base font-roboto'>
                     <Text className='font-extrabold'>Note: {' '}</Text>
