@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import img from '@/assets/images/img.jpg'
 import { ResizeMode, Video } from 'expo-av';
 
 function VideoCard({ video:
@@ -29,7 +28,7 @@ function VideoCard({ video:
                     </View>
                 </View>
                 <View className='pt-2'>
-                    <Entypo name="dots-three-vertical" size={24} color="#7b8b8b " />
+                    <Entypo name="dots-three-vertical" size={24} color="#7b8b8b" />
                 </View>
             </View>
 
