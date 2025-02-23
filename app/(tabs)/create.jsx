@@ -28,7 +28,7 @@ const Create = () => {
     const openPicker = async (selectType) => {
         const result = await DocumentPicker.getDocumentAsync({
             type: selectType === 'image'
-                ? ['image/png', 'image/jpg']
+                ? ['image/png', 'image/jpg', 'image/jpeg']
                 : ['video/mp4', 'video/gif']
         });
 
@@ -47,10 +47,6 @@ const Create = () => {
                 ...prev,
                 [selectType === 'image' ? 'thumbnail' : 'video']: file
             }));
-        } else {
-            setTimeout(() => {
-                Alert.alert('Document Picker', JSON.stringify(result, null, 2));
-            }, 100);
         }
     };
 
@@ -114,9 +110,7 @@ const Create = () => {
                                     uri: form.video.uri
                                 }}
                                 style={{ width: '100%', height: 250, borderRadius: 15 }}
-                                useNativeControls
                                 resizeMode={ResizeMode.COVER}
-                                isLooping
                             />
                         ) : (
                             <View className='w-full h-40 px-4 bg-black-100 rounded-2xl justify-center items-center'>
