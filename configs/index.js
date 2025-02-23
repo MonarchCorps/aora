@@ -6,7 +6,8 @@ const GLOBAL_CONSTANTS = {
         API_BASE_URL: process.env.EXPO_PUBLIC_BASE_URL,
         API_VERSION: process.env.EXPO_PUBLIC_APP_API_VERSION,
         CLIENT_URL: process.env.EXPO_PUBLIC_CLIENT_URL
-    }
+    },
+    LIMIT: process.env.EXPO_PUBLIC_TRENDING_POSTS_LIMIT
 };
 
 const CONFIGS = GLOBAL_CONSTANTS;

@@ -16,3 +16,6 @@ export const APIVersion1CreatePost = async (data) =>
 
 export const APIVersion1FetchAllPosts = async () =>
     $http.get(`/posts/fetch-all-post`).then((res) => res.data)
+
+export const APIVersion1FetchTrendingPosts = async (data) =>
+    $http.get(`/posts/trending-post/${data}`).then(res => res.data)
