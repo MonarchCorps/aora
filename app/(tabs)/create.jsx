@@ -6,6 +6,8 @@ import { ResizeMode, Video } from 'expo-av'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import CustomButton from '@/components/CustomButton'
 import * as DocumentPicker from 'expo-document-picker'
+import * as ImagePicker from 'expo-image-picker'
+
 import { useCreatePost } from '@/store/postFn'
 import { navigate } from '@/helper/navigate'
 import { useQueryClient } from '@tanstack/react-query'
@@ -26,11 +28,16 @@ const Create = () => {
     const { mutate, isPending } = useCreatePost()
 
     const openPicker = async (selectType) => {
-        const result = await DocumentPicker.getDocumentAsync({
-            type: selectType === 'image'
-                ? ['image/png', 'image/jpg', 'image/jpeg']
-                : ['video/mp4', 'video/gif']
-        });
+        // const result = await DocumentPicker.getDocumentAsync({
+        //     type: selectType === 'image'
+        //         ? ['image/png', 'image/jpg', 'image/jpeg']
+        //         : ['video/mp4', 'video/gif']
+        // });
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: selectType == 'image' ? ImagePicker.MediaTypeOptions.Images : ImagePicker.MediaTypeOptions.Videos,
+            aspect: [4, 3],
+            quality: 1
+        })
 
         if (!result.canceled) {
             const file = result.assets[0];
