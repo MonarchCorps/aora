@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Text, FlatList, TouchableOpacity, ImageBackground, Image } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import img from '@/assets/images/img.jpg'
 import { Video, ResizeMode } from 'expo-av'
 
 const zoomIn = {
@@ -28,7 +27,7 @@ const TrendingItem = ({ activeItem, item }) => {
 
     return (
         <Animatable.View
-            className='mr-5'
+            className='ml-5'
             animation={activeItem === item?._id ? zoomIn : zoomOut}
             duration={500}
         >
@@ -36,10 +35,11 @@ const TrendingItem = ({ activeItem, item }) => {
                 play ?
                     <Video
                         source={{
-                            uri: item.video
+                            uri: item.video.url
                         }}
-                        className='w-52 h-72 rounded-[35px] mt-3 bg-white/10'
-                        resizeMode={ResizeMode.CONTAIN}
+                        className='bg-white/10'
+                        style={{ width: 160, height: 240, borderRadius: 15, marginTop: 20 }}
+                        resizeMode={ResizeMode.COVER}
                         useNativeControls
                         shouldPlay
                         onPlaybackStatusUpdate={(status) => {
@@ -50,10 +50,9 @@ const TrendingItem = ({ activeItem, item }) => {
                     />
                     : <TouchableOpacity className='relative justify-center items-center' activeOpacity={0.7} onPress={() => setPlay(true)}>
                         <ImageBackground
-                            // source={{
-                            //     uri: item?.thumbnail
-                            // }}
-                            source={img}
+                            source={{
+                                uri: item.thumbnail.url
+                            }}
                             className='w-52 h-72 rounded-[35px] my-5 overflow-hidden shadow-lg shadow-black/40'
                             resizeMode='cover'
                         />
@@ -88,6 +87,7 @@ function Trending({ posts }) {
             }}
             contentOffset={{ x: 170 }}
             horizontal
+            showsHorizontalScrollIndicator={false}
         />
     )
 }

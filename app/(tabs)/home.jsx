@@ -6,23 +6,26 @@ import Trending from '@/components/Trending'
 import EmptyState from '@/components/EmptyState'
 import { useState } from 'react'
 import VideoCard from '@/components/VideoCard'
-import { trendingPosts } from '@/db'
 import { StatusBar } from 'expo-status-bar'
 import useAuth from '@/hooks/useAuth'
-import { useFetchAllPosts } from '@/store/postFn'
+import { useFetchAllPosts, useFetchTrendingPosts } from '@/store/postFn'
 import { useQueryClient } from '@tanstack/react-query'
+import { CONFIGS } from '@/configs'
 
 const Home = () => {
 
     const { auth } = useAuth();
     const queryClient = useQueryClient();
+
     const { data = [], isLoading } = useFetchAllPosts();
+    const { data: trendingPosts } = useFetchTrendingPosts(CONFIGS.LIMIT)
 
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = async () => {
         setRefreshing(true);
         await queryClient.invalidateQueries({ queryKey: ["all-posts"] });
+        await queryClient.invalidateQueries({ queryKey: ["trending-posts"] });
         setRefreshing(false);
     };
 
