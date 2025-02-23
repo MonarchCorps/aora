@@ -13,3 +13,6 @@ export const APIVersion1Login = async (data) =>
 
 export const APIVersion1CreatePost = async (data) =>
     $http.post(`/posts/create-post`, data).then((res) => res.data)
+
+export const APIVersion1FetchAllPosts = async () =>
+    $http.get(`/posts/fetch-all-post`).then((res) => res.data)
