@@ -1,31 +1,31 @@
 import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { images } from '@/constants'
 import SearchInput from '@/components/SearchInput'
 import Trending from '@/components/Trending'
 import EmptyState from '@/components/EmptyState'
 import { useEffect, useState } from 'react'
 import VideoCard from '@/components/VideoCard'
-import { items, trendingPosts } from '@/db'
 import { useLocalSearchParams } from 'expo-router'
+import { useFetchAllPosts, useFetchTrendingPosts } from '@/store/postFn'
 
 const Search = () => {
     const { query } = useLocalSearchParams()
-    // const [refreshing, setRefreshing] = useState(false)
+    const { data } = useFetchAllPosts()
+    const { data: trendingPosts } = useFetchTrendingPosts()
 
-    // const onRefresh = async () => {
-    //     setRefreshing(true)
-    //     setRefreshing(false)
-    // }
+    const [filteredPosts, setFilteredPosts] = useState([])
 
-    // useEffect(() => {
-    //     refetch()
-    // }, [query])
+    useEffect(() => {
+        if (data?.length) {
+            const filteredData = data.filter(post => post?.title.toLowerCase().includes(query.toLowerCase()))
+            setFilteredPosts(filteredData)
+        }
+    }, [data, query])
 
     return (
         <SafeAreaView className='bg-primary h-full'>
             <FlatList
-                data={items}
+                data={filteredPosts}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
                     return (
