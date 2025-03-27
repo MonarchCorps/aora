@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, Vibration, Alert } from 'react-native'
+import { View, Text, ScrollView, Image, Vibration, Alert, KeyboardAvoidingView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '@/constants'
 import FormField from '../../components/FormField'
@@ -33,9 +33,10 @@ const SignIn = () => {
                 replace('/')
             },
             onError: (error) => {
+                console.log(error.response?.data)
                 Alert.alert(
                     'Error',
-                    error.response?.data?.message || 'Failed to login'
+                    error.response?.data?.message
                 )
                 Vibration.vibrate(300);
             }
@@ -44,7 +45,7 @@ const SignIn = () => {
 
     return (
         <SafeAreaView className='bg-primary h-full'>
-            <ScrollView>
+            <KeyboardAvoidingView>
                 <View className='w-full min-h-[85vh] justify-center px-4 my-6  max-w-[600px] mx-auto'>
                     <Image
                         source={images.logo}
@@ -63,6 +64,22 @@ const SignIn = () => {
                         isPending={isPending}
                     />
 
+                    <FormField
+                        title='Password'
+                        value={form.password}
+                        handleChangeText={(e) => setForm({ ...form, password: e })}
+                        otherStyles='mt-7'
+                        isPending={isPending}
+                        isPassword={true}
+                    />
+                    <FormField
+                        title='Password'
+                        value={form.password}
+                        handleChangeText={(e) => setForm({ ...form, password: e })}
+                        otherStyles='mt-7'
+                        isPending={isPending}
+                        isPassword={true}
+                    />
                     <FormField
                         title='Password'
                         value={form.password}
@@ -90,7 +107,7 @@ const SignIn = () => {
                     </View>
                 </View>
 
-            </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }
