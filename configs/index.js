@@ -1,15 +1,17 @@
-const NODE_ENV = process.env.EXPO_PUBLIC_MODE_ENV || "development";
+import Constants from 'expo-constants'
+
+const MODE_ENV = Constants.expoConfig.extra.modeEnv || "development";
 
 const GLOBAL_CONSTANTS = {
-    ENVIRONMENT: process.env.EXPO_PUBLIC_ENVIRONMENT_MODE,
+    ENVIRONMENT: Constants.expoConfig.extra.environmentMode,
     URL: {
-        API_BASE_URL: process.env.EXPO_PUBLIC_BASE_URL,
-        API_VERSION: process.env.EXPO_PUBLIC_APP_API_VERSION,
-        CLIENT_URL: process.env.EXPO_PUBLIC_CLIENT_URL
+        API_BASE_URL: Constants.expoConfig.extra.baseUrl,
+        API_VERSION: Constants.expoConfig.extra.apiVersion,
+        CLIENT_URL: Constants.expoConfig.extra.clientUrl
     },
-    LIMIT: process.env.EXPO_PUBLIC_TRENDING_POSTS_LIMIT
+    LIMIT: Constants.expoConfig.extra.trendingPostsLimit
 };
 
 const CONFIGS = GLOBAL_CONSTANTS;
 
-export { NODE_ENV, CONFIGS };
+export { MODE_ENV, CONFIGS };
